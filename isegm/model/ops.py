@@ -39,7 +39,7 @@ class DistMaps(nn.Module):
         super(DistMaps, self).__init__()
         self.spatial_scale = spatial_scale
         self.norm_radius = norm_radius
-        self.cpu_mode = cpu_mode
+        self.cpu_mode = False  # cpu_mode
         self.use_disks = use_disks
         if self.cpu_mode:
             from isegm.utils.cython import get_dist_maps

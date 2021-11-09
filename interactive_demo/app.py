@@ -1,3 +1,4 @@
+import os.path
 import tkinter as tk
 from tkinter import messagebox, filedialog, ttk
 
@@ -107,6 +108,10 @@ class InteractiveDemoApp(ttk.Frame):
             FocusButton(self.clicks_options_frame, text='Finish\nobject', bg='#b6d7a8', fg='black', width=10, height=2,
                         state=tk.DISABLED, command=self.controller.finish_object)
         self.finish_object_button.pack(side=tk.LEFT, fill=tk.X, padx=10, pady=3)
+        self.cancel_click_button = \
+            FocusButton(self.clicks_options_frame, text='cancel', bg='#b60000', fg='black', width=10, height=2,
+                        state=tk.DISABLED, command=self.controller.cancel_object)
+        self.cancel_click_button.pack(side=tk.LEFT, fill=tk.X, padx=10, pady=3)
         self.undo_click_button = \
             FocusButton(self.clicks_options_frame, text='Undo click', bg='#ffe599', fg='black', width=10, height=2,
                         state=tk.DISABLED, command=self.controller.undo_click)
@@ -185,6 +190,7 @@ class InteractiveDemoApp(ttk.Frame):
                 self.controller.set_image(image)
                 self.save_mask_btn.configure(state=tk.NORMAL)
                 self.load_mask_btn.configure(state=tk.NORMAL)
+                self.filename = os.path.split(filename)[-1]
 
     def _save_mask_callback(self):
         self.menubar.focus_set()
@@ -192,8 +198,8 @@ class InteractiveDemoApp(ttk.Frame):
             mask = self.controller.result_mask
             if mask is None:
                 return
-
-            filename = filedialog.asksaveasfilename(parent=self.master, initialfile='mask.png', filetypes=[
+            initialfile = os.path.splitext(self.filename)[0]+'.bmp'
+            filename = filedialog.asksaveasfilename(parent=self.master, initialfile=initialfile, filetypes=[
                 ("PNG image", "*.png"),
                 ("BMP image", "*.bmp"),
                 ("All files", "*.*"),

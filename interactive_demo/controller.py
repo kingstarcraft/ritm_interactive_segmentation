@@ -17,6 +17,7 @@ class InteractiveController:
         self.object_count = 0
         self._result_mask = None
         self._init_mask = None
+        self._prev_mask = None
 
         self.image = None
         self.predictor = None
@@ -94,10 +95,20 @@ class InteractiveController:
     def finish_object(self):
         if self.current_object_prob is None:
             return
-
+        self._prev_mask = self.result_mask
         self._result_mask = self.result_mask
         self.object_count += 1
         self.reset_last_object()
+
+    def cancel_object(self):
+        self.reset_last_object()
+        if self._prev_mask is None:
+            return
+        self.object_count -= 1
+        self._result_mask = self._prev_mask
+        self.result_mask = self._prev_mask
+        self.update_image_callback()
+
 
     def reset_last_object(self, update_image=True):
         self.states = []
